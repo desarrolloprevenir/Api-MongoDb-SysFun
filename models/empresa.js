@@ -10,5 +10,5 @@ var empresaSchema = new Schema({
     direccion: { type: String, required: [true, 'La direccion es necesaria'] }
 });
 
-empresaSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser unico' });
+empresaSchema.plugin(uniqueValidator, { message: ' debe de ser unico' });
 module.exports = mongoose.model('Empresa', empresaSchema);

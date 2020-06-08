@@ -8,7 +8,6 @@ var usuarioSchema = new Schema({
     cedula: { type: String, unique: true, required: [true, 'La decula es necesaria'] },
     telefono: { type: String, required: [true, 'El telefono es necesario'] },
     correo: { type: String, unique: true, required: [true, 'El correo electronico es necesario'] },
-    usuario: { type: String, required: [true, 'El nombre de usuario es necesario'] },
     contrasena: { type: String, required: [true, 'La contraseña es necesaria'] },
     cargo: { type: String, default: 'Representante legal', required: [true, 'El cargo es necesario'] },
     empresa: {
@@ -18,5 +17,5 @@ var usuarioSchema = new Schema({
     }
 });
 
-usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser unico' });
+usuarioSchema.plugin(uniqueValidator, { message: ' debe de ser unico' });
 module.exports = mongoose.model('Usuario', usuarioSchema);

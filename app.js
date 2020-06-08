@@ -1,6 +1,7 @@
 // Requires librerias etc.
 const express = require('express');
 const mongoose = require('mongoose');
+const config = require('./config/config');
 
 // Inicializar variables
 const app = express();
@@ -21,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Conexion a la base de datos
-mongoose.connect('mongodb://localhost:27017/sys_fun', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config('produccion').configBD.HOST, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Conectado a MongoDB...'))
     .catch(err => console.log('No se pudo conectar con MongoDB..', err));
 
@@ -31,11 +32,13 @@ const appRoutes = require('./routes/app');
 const empresaRoutes = require('./routes/empresa');
 const usuarioRoutes = require('./routes/usuario');
 const registroRoutes = require('./routes/registro');
+const loginRoutes = require('./routes/login');
 
 // Rutas
 app.use('/empresa', empresaRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/registro', registroRoutes);
+app.use('/login', loginRoutes);
 app.use('/', appRoutes);
 
 // Escuchar peticiones

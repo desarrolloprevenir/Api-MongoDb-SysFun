@@ -11,7 +11,7 @@ const Empresa = require('../models/empresa');
 
 app.post('/', (req, res) => {
 
-    console.log(req.body);
+    // console.log(req.body);
     var empresa = new Empresa({
         nombre: req.body.nombre,
         nit: req.body.nit,
@@ -46,6 +46,8 @@ app.post('/', (req, res) => {
 
             usuario.save((err, usuarioGuardado) => {
                 if (err) {
+
+                    Empresa.deleteOne({ _id: empresaGuardada._id }, (err, empresaBorrada) => {});
                     return res.status(400).json({
                         ok: 'false',
                         mensaje: 'Error al crear usuario.',
