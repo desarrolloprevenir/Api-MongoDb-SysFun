@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
+
 var usuarioSchema = new Schema({
     nombres: { type: String, required: [true, 'El nombre es necesario'] },
     apellidos: { type: String, required: [true, 'El apellido es necesario'] },
@@ -10,12 +11,20 @@ var usuarioSchema = new Schema({
     correo: { type: String, unique: true, required: [true, 'El correo electronico es necesario'] },
     contrasena: { type: String, required: [true, 'La contraseña es necesaria'] },
     cargo: { type: String, default: 'Representante legal', required: [true, 'El cargo es necesario'] },
+    rol: {},
+    imagen: { type: String, default: 'ruta imagen default' },
+    activo: { type: Boolean, default: true },
+    creadoPor: {
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario',
+    },
     empresa: {
         type: Schema.Types.ObjectId,
         ref: 'Empresa',
         required: [true, 'El id empresa es un campo obligatorio ']
-    }
-});
+    },
+    menu: []
+}, { timestamps: true });
 
 usuarioSchema.plugin(uniqueValidator, { message: ' debe de ser unico' });
 module.exports = mongoose.model('Usuario', usuarioSchema);

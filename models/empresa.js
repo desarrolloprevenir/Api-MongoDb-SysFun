@@ -8,7 +8,7 @@ var empresaSchema = new Schema({
     codigoNit: { type: String, required: [true, 'El codigo del nit es necesario'] },
     telefono: { type: String, required: [true, 'El telefono es necesario'] },
     direccion: { type: String, required: [true, 'La direccion es necesaria'] }
-});
+}, { timestamps: true });
 
 empresaSchema.plugin(uniqueValidator, { message: ' debe de ser unico' });
 module.exports = mongoose.model('Empresa', empresaSchema);

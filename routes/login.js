@@ -15,6 +15,7 @@ app.post('/', (req, res) => {
     // console.log(req.body);
     Usuario.findOne({ correo: req.body.correo })
         .populate('empresa')
+        .populate('creadoPor', '_id nombres apellidos cargo')
         .exec((err, usuarioBD) => {
 
             console.log(usuarioBD);

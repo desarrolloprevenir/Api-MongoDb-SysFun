@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Conexion a la base de datos
-mongoose.connect(config('produccion').configBD.HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config('desarrollo').configBD.HOST, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Conectado a MongoDB...'))
     .catch(err => console.log('No se pudo conectar con MongoDB..', err));
 

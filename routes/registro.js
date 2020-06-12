@@ -1,4 +1,5 @@
 const express = require('express');
+var config = require('../config/config');
 const app = express();
 
 // Modelos
@@ -39,11 +40,16 @@ app.post('/', (req, res) => {
                 cedula: req.body.usuario.cedula,
                 telefono: req.body.usuario.telefono,
                 correo: req.body.usuario.correo,
-                usuario: req.body.usuario.usuario,
                 contrasena: req.body.usuario.contrasena,
-                empresa: empresaGuardada._id
+                rol: req.body.usuario.rol,
+                cargo: 'Representante Legal',
+                empresa: empresaGuardada._id,
+                menu: config('desarrollo').menu,
             });
 
+            usuario.creadoPor = usuario._id;
+
+            // console.log(usuario);
             usuario.save((err, usuarioGuardado) => {
                 if (err) {
 

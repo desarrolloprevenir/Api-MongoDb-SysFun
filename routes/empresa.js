@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+
 // modelos
 const Empresa = require('../models/empresa');
 
