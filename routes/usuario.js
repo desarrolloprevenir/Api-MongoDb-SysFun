@@ -23,8 +23,8 @@ app.post('/', (req, res) => {
         contrasena: req.body.contrasena,
         rol: req.body.rol,
         cargo: req.body.cargo,
-        creadoPor: req.body.idCreador,
-        empresa: req.body.idEmpresa,
+        creadoPor: req.body.creadoPor,
+        empresa: req.body.empresa._id,
         funcionalidadesyPermisos: req.body.funcionalidadesyPermisos,
         menu: req.body.menu
     });
@@ -55,38 +55,101 @@ app.post('/', (req, res) => {
 app.get('/empresa/:id', middlewares.verificaToken, (req, res) => {
 
 
-    let puede = permisos.verificarPermisos({ idUsuario: req.idUsuario, modulo: 1, subMenu: 0 });
+    // Verificar permisos
+    let puede = permisos.verificarPermisos({ idUsuario: req.usuario.idUsuario, modulo: 1, subMenu: 0, permiso: 'ver' });
 
     puede.then(() => {
 
             // console.log('desde usuario', puede);
             var idEmpresa = req.params.id;
-            Usuario.find({ empresa: idEmpresa }, (err, usuarios) => {
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        mensaje: 'Error al buscar usuarios.',
-                        errors: err
-                    });
-                }
+            Usuario.find({ empresa: idEmpresa })
+                .populate('empresa')
+                .exec((err, usuarios) => {
 
-                if (!usuarios) {
-                    return res.status(204).json({
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            mensaje: 'Error al buscar usuarios.',
+                            errors: err
+                        });
+                    }
+
+                    if (!usuarios) {
+                        return res.status(204).json({
+                            ok: true,
+                            mensaje: 'No hay usuarios registrados.',
+                            usuarios
+                        });
+                    }
+
+                    res.status(200).json({
                         ok: true,
-                        mensaje: 'No hay usuarios.',
-                        usuarios
+                        usuarios: usuarios
                     });
-                }
-
-                res.status(200).json({
-                    ok: true,
-                    usuarios: usuarios
                 });
-            });
         })
         .catch(mensaje => {
             res.status(mensaje.status).json(mensaje.json);
         });
+});
+
+// ======================================
+// Get usuario por id
+// ======================================
+
+app.get('/:idUsuario', middlewares.verificaToken, (req, res) => {
+
+
+    // Verificar permisos
+    let puede = permisos.verificarPermisos({ idUsuario: req.usuario.idUsuario, modulo: 1, subMenu: 0, permiso: 'ver' });
+
+    puede.then(() => {
+        Usuario.findOne({ _id: req.params.idUsuario, activo: true })
+            .populate('empresa')
+            .exec((err, usuarioBd) => {
+
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al buscar usuario.',
+                        errors: err
+                    });
+                }
+
+                // console.log(usuarioBd);
+
+                if (!usuarioBd) {
+                    return res.status(204).json({
+                        ok: false,
+                        mensaje: 'El usuario no existe o no se encuatra activo.',
+                        usuario: usuarioBd
+                    });
+                }
+
+                //  Validación usuario que se desea editar pertenesca a la misma empresa
+
+                // console.log(usuarioBd.empresa._id, req.usuario.idEmpresa);
+                if (usuarioBd.empresa._id.toString() === req.usuario.idEmpresa.toString()) {
+                    // console.log('si se puede editar');
+                    return res.status(200).json({
+                        ok: true,
+                        usuario: usuarioBd
+                    });
+                }
+
+                res.status(400).json({
+                    ok: false,
+                    mensaje: 'Restringido'
+                });
+
+
+            });
+    })
+
+    .catch(mensaje => {
+        res.status(mensaje.status).json(mensaje.json);
+    });
+
 });
 
 

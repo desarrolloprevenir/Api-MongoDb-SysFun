@@ -36,10 +36,17 @@ exports.verificarPermisos = function(info) {
             // console.log('Desde middleware', usuarioBd);
 
             var menu = usuarioBd.menu;
-            if (menu[info.modulo].activo === true) {
-                if (menu[info.modulo].subMenu[info.subMenu].ver === true) {
-                    return resolve(true);
-                }
+
+            // Verificacion de permisos
+
+            switch (info.permiso) {
+                case 'ver':
+                    if (menu[info.modulo].activo === true) {
+                        if (menu[info.modulo].subMenu[info.subMenu].ver === true) {
+                            return resolve(true);
+                        }
+                    }
+                    break;
             }
 
             return reject({
