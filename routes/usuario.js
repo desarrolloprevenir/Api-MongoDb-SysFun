@@ -153,4 +153,62 @@ app.get('/:idUsuario', middlewares.verificaToken, (req, res) => {
 });
 
 
+// ======================================
+// Editar usuario
+// ======================================
+
+app.put('/', middlewares.verificaToken, (req, res) => {
+
+    // Verificar permisos
+    let puede = permisos.verificarPermisos({ idUsuario: req.usuario.idUsuario, modulo: 1, subMenu: 0, permiso: 'editar' });
+
+    puede.then(
+
+
+
+            Usuario.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, usuarioEdit) => {
+
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al editar usuario.',
+                        errors: err
+                    });
+                }
+
+                if (!usuarioEdit) {
+                    return res.status(204).json({
+                        ok: false,
+                        mensaje: 'El usuario no existe o no se encuatra activo.',
+                        usuario: usuarioBd
+                    });
+                }
+
+                return res.status(200).json({
+                    ok: true,
+                    usuario: usuarioEdit
+                });
+
+
+
+            })
+
+
+
+        )
+        .catch(mensaje => {
+            res.status(mensaje.status).json(mensaje.json);
+        });
+
+
+
+
+
+
+
+
+
+});
+
+
 module.exports = app;

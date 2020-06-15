@@ -47,6 +47,14 @@ exports.verificarPermisos = function(info) {
                         }
                     }
                     break;
+
+                case 'editar':
+                    if (menu[info.modulo].activo === true) {
+                        if (menu[info.modulo].subMenu[info.subMenu].permisos.editar === true) {
+                            return resolve(true);
+                        }
+                    }
+                    break;
             }
 
             return reject({

@@ -16,6 +16,7 @@ app.use(function(req, res, next) {
 
 // 
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 
 // Body Parser - URL encoded
 app.use(express.json());
