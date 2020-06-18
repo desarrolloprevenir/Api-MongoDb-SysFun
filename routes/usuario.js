@@ -62,9 +62,11 @@ app.get('/empresa/:id', middlewares.verificaToken, (req, res) => {
 
             // console.log('desde usuario', puede);
             var idEmpresa = req.params.id;
-            Usuario.find({ empresa: idEmpresa })
+            Usuario.find({ empresa: idEmpresa, activo: true })
                 .populate('empresa')
                 .exec((err, usuarios) => {
+
+                    // console.log(usuarios);
 
                     if (err) {
                         return res.status(500).json({
@@ -99,8 +101,6 @@ app.get('/empresa/:id', middlewares.verificaToken, (req, res) => {
 
 app.get('/:idUsuario', middlewares.verificaToken, (req, res) => {
 
-
-    // Verificar permisos
     let puede = permisos.verificarPermisos({ idUsuario: req.usuario.idUsuario, modulo: 1, subMenu: 0, permiso: 'ver' });
 
     puede.then(() => {
@@ -108,6 +108,7 @@ app.get('/:idUsuario', middlewares.verificaToken, (req, res) => {
             .populate('empresa')
             .exec((err, usuarioBd) => {
 
+                // console.log('usuariobd', usuarioBd);
                 if (err) {
                     return res.status(500).json({
                         ok: false,
@@ -164,8 +165,6 @@ app.put('/', middlewares.verificaToken, (req, res) => {
 
     puede.then(
 
-
-
             Usuario.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, usuarioEdit) => {
 
                 if (err) {
@@ -184,31 +183,61 @@ app.put('/', middlewares.verificaToken, (req, res) => {
                     });
                 }
 
-                return res.status(200).json({
+                res.status(200).json({
                     ok: true,
                     usuario: usuarioEdit
                 });
+            })
+        )
+        .catch(mensaje => {
+            res.status(mensaje.status).json(mensaje.json);
+        });
+});
 
+
+
+// ======================================
+// Eliminar usuario
+// ======================================
+
+app.delete('/:idUsuario', middlewares.verificaToken, (req, res) => {
+
+    let puede = permisos.verificarPermisos({ idUsuario: req.usuario.idUsuario, modulo: 1, subMenu: 0, permiso: 'eliminar' });
+
+    puede.then(
+
+            Usuario.findByIdAndUpdate(req.params.idUsuario, { activo: false }, { new: true }, (err, usuarioDesactivado) => {
+
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al eliminar usuario.',
+                        errors: err
+                    });
+                }
+
+                if (!usuarioDesactivado) {
+                    return res.status(204).json({
+                        ok: false,
+                        mensaje: 'No se encontro el usuario.',
+                        usuario: usuarioBd
+                    });
+                }
+
+                res.status(200).json({
+                    ok: true,
+                    usuario: usuarioDesactivado
+                });
 
 
             })
-
-
-
         )
         .catch(mensaje => {
             res.status(mensaje.status).json(mensaje.json);
         });
 
-
-
-
-
-
-
-
-
 });
+
 
 
 module.exports = app;

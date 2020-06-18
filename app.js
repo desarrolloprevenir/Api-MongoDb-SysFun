@@ -34,8 +34,12 @@ const empresaRoutes = require('./routes/empresa');
 const usuarioRoutes = require('./routes/usuario');
 const registroRoutes = require('./routes/registro');
 const loginRoutes = require('./routes/login');
+const uploadsRoutes = require('./routes/uploads');
+const imagenesRoutes = require('./routes/imagenes');
 
 // Rutas
+app.use('/imagenes', imagenesRoutes);
+app.use('/uploads', uploadsRoutes);
 app.use('/empresa', empresaRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/registro', registroRoutes);

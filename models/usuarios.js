@@ -12,7 +12,7 @@ var usuarioSchema = new Schema({
     contrasena: { type: String, required: [true, 'La contraseña es necesaria'] },
     cargo: { type: String, default: 'Representante legal', required: [true, 'El cargo es necesario'] },
     rol: {},
-    imagen: { type: String, default: 'ruta imagen default' },
+    imagen: { type: String, default: 'http://161.35.113.108:3000/imagenes/user.png' },
     activo: { type: Boolean, default: true },
     creadoPor: {
         type: Schema.Types.ObjectId,

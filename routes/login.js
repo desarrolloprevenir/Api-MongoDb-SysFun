@@ -18,7 +18,7 @@ app.post('/', (req, res) => {
         .populate('creadoPor', '_id nombres apellidos cargo')
         .exec((err, usuarioBD) => {
 
-            console.log(usuarioBD);
+            // console.log(usuarioBD);
             if (err) {
                 return res.status(500).json({
                     ok: false,
