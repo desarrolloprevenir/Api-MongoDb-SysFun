@@ -63,6 +63,14 @@ exports.verificarPermisos = function(info) {
                         }
                     }
                     break;
+
+                default:
+                    if (menu[info.modulo].activo === true) {
+                        if (menu[info.modulo].subMenu[info.subMenu].permisos.crear === true) {
+                            return resolve(true);
+                        }
+                    }
+                    break;
             }
 
             return reject({

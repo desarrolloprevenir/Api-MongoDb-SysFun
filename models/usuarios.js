@@ -4,6 +4,9 @@ var Schema = mongoose.Schema;
 
 
 var usuarioSchema = new Schema({
+
+    // Info usuario
+
     nombres: { type: String, required: [true, 'El nombre es necesario'] },
     apellidos: { type: String, required: [true, 'El apellido es necesario'] },
     cedula: { type: String, unique: [true, 'Este número de cedula ya se encuentra registrado'], required: [true, 'La decula es necesaria'] },
@@ -12,8 +15,12 @@ var usuarioSchema = new Schema({
     contrasena: { type: String, required: [true, 'La contraseña es necesaria'] },
     cargo: { type: String, default: 'Representante legal', required: [true, 'El cargo es necesario'] },
     rol: {},
-    imagen: { type: String, default: 'http://161.35.113.108:3000/imagenes/user.png' },
+    imagen: { type: String, default: 'user.png' },
     activo: { type: Boolean, default: true },
+
+
+    // referencias
+
     creadoPor: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',

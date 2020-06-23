@@ -55,6 +55,8 @@ app.put('/:id', (req, res) => {
 
         Usuario.findById(id, (err, usuario) => {
 
+            // console.log('Find by id', usuario);
+
             if (err) {
                 return res.status(500).json({
                     ok: false,
@@ -75,20 +77,49 @@ app.put('/:id', (req, res) => {
 
             var pathViejo = './public/imagenes-usuario/' + usuario.imagen;
             // console.log(pathViejo);
-            // Si existe, elimina la imagen anterior
-            if (fs.existsSync(pathViejo)) {
-                fs.unlinkSync(pathViejo);
+
+            if (usuario.imagen !== 'user.png') {
+                // Si existe, elimina la imagen anterior
+                if (fs.existsSync(pathViejo)) {
+                    fs.unlinkSync(pathViejo);
+                }
             }
 
+
             usuario.imagen = nombreArchivo;
+
             usuario.save((err, usuarioActualizado) => {
-                usuarioActualizado.password = '';
-                return res.status(200).json({
-                    ok: 'true',
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al actualiza imagen de usuario.',
+                        errors: err
+                    });
+                }
+
+                usuarioActualizado.contrasena = '';
+                res.status(200).json({
+                    ok: true,
                     mensaje: 'Imagen de usuario actualizada.',
-                    usuario: usuarioActualizado
+                    usuario: usuarioActualizado,
                 });
             });
+
+
+            // usuario.save((err, usuarioActualizado) => {
+
+            //     if(err) {
+
+            //     }
+
+            //     console.log(usuarioActualizado);
+            //     // usuarioActualizado.contrasena = '';
+            //     return res.status(200).json({
+            //         ok: 'true',
+            //         mensaje: 'Imagen de usuario actualizada.',
+            //         usuario: usuarioActualizado
+            //     });
+            // });
 
         });
     });

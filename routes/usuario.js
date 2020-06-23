@@ -132,6 +132,7 @@ app.get('/:idUsuario', middlewares.verificaToken, (req, res) => {
                 // console.log(usuarioBd.empresa._id, req.usuario.idEmpresa);
                 if (usuarioBd.empresa._id.toString() === req.usuario.idEmpresa.toString()) {
                     // console.log('si se puede editar');
+                    usuarioBD.contrasena = '';
                     return res.status(200).json({
                         ok: true,
                         usuario: usuarioBd
@@ -165,7 +166,18 @@ app.put('/', middlewares.verificaToken, (req, res) => {
 
     puede.then(
 
-            Usuario.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true }, (err, usuarioEdit) => {
+            Usuario.findOneAndUpdate({ _id: req.body._id }, {
+                nombres: req.body.nombres,
+                apellidos: req.body.apellidos,
+                cedula: req.body.cedula,
+                telefono: req.body.telefono,
+                correo: req.body.correo,
+                rol: req.body.rol,
+                cargo: req.body.cargo,
+                menu: req.body.menu
+            }, { new: true })
+            .populate('empresa')
+            .exec((err, usuarioEdit) => {
 
                 if (err) {
                     return res.status(500).json({
@@ -183,6 +195,7 @@ app.put('/', middlewares.verificaToken, (req, res) => {
                     });
                 }
 
+                usuarioEdit.contrasena = '';
                 res.status(200).json({
                     ok: true,
                     usuario: usuarioEdit
