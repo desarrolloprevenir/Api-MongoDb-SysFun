@@ -132,7 +132,7 @@ app.get('/:idUsuario', middlewares.verificaToken, (req, res) => {
                 // console.log(usuarioBd.empresa._id, req.usuario.idEmpresa);
                 if (usuarioBd.empresa._id.toString() === req.usuario.idEmpresa.toString()) {
                     // console.log('si se puede editar');
-                    usuarioBD.contrasena = '';
+                    usuarioBd.contrasena = '';
                     return res.status(200).json({
                         ok: true,
                         usuario: usuarioBd

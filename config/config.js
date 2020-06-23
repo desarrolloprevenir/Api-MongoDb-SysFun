@@ -6,7 +6,7 @@ var config = function configuracion(entorno) {
             "configBD": {
                 // mongodb://161.35.229.0:27017/sys_fun
                 // mongodb://localhost:27017/sys_fun
-                "HOST": "mongodb://161.35.229.0:27017/sys_fun"
+                "HOST": "mongodb://localhost:27017/sys_fun"
             },
             "token": {
                 "SEED": "oe"
