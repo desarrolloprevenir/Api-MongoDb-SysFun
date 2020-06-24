@@ -88,39 +88,43 @@ app.put('/:id', (req, res) => {
 
             usuario.imagen = nombreArchivo;
 
-            usuario.save()
-                .populate('empresa').exec((err, usuarioActualizado) => {
-                    if (err) {
-                        return res.status(500).json({
-                            ok: false,
-                            mensaje: 'Error al actualiza imagen de usuario.',
-                            errors: err
-                        });
-                    }
 
-                    usuarioActualizado.contrasena = '';
-                    res.status(200).json({
-                        ok: true,
-                        mensaje: 'Imagen de usuario actualizada.',
-                        usuario: usuarioActualizado,
-                    });
-                });
+            // usuario.save()
+            //     .populate('empresa')
+            //     .exec((err, usuarioActualizado) => {
+            //         if (err) {
+            //             return res.status(500).json({
+            //                 ok: false,
+            //                 mensaje: 'Error al actualiza imagen de usuario.',
+            //                 errors: err
+            //             });
+            //         }
 
-
-            // usuario.save((err, usuarioActualizado) => {
-
-            //     if(err) {
-
-            //     }
-
-            //     console.log(usuarioActualizado);
-            //     // usuarioActualizado.contrasena = '';
-            //     return res.status(200).json({
-            //         ok: 'true',
-            //         mensaje: 'Imagen de usuario actualizada.',
-            //         usuario: usuarioActualizado
+            //         usuarioActualizado.contrasena = '';
+            //         res.status(200).json({
+            //             ok: true,
+            //             mensaje: 'Imagen de usuario actualizada.',
+            //             usuario: usuarioActualizado,
+            //         });
             //     });
-            // });
+
+
+            usuario.save((err, usuarioActualizado) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al actualiza imagen de usuario.',
+                        errors: err
+                    });
+                }
+
+                usuarioActualizado.contrasena = '';
+                return res.status(200).json({
+                    ok: 'true',
+                    mensaje: 'Imagen de usuario actualizada.',
+                    usuario: usuarioActualizado
+                });
+            });
 
         });
     });

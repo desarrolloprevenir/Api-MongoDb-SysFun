@@ -18,7 +18,7 @@ exports.verificaToken = function(req, res, next) {
             });
         }
 
-        req.usuario = { idUsuario: decode.usuario._id, idEmpresa: decode.usuario.empresa._id }
+        req.usuario = { idUsuario: decode.usuario._id, idEmpresa: decode.usuario.empresa };
         next();
     });
 };
